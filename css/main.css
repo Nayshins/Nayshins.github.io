@@ -46,7 +46,7 @@ p {
 
 /* Links */
 a {
-    color: #1abc9c;
+    color: #ea4a3c;
     word-wrap: break-word;
 
     -webkit-transition: color 0.1s ease-in, background 0.1s ease-in;
@@ -109,7 +109,7 @@ a:after {
 	color: #555555;
 	cursor: default;
 	background-color: #ffffff;
-	border-left: 5px solid #1abc9c;
+	border-left: 5px solid #ea4a3c;
 	border-bottom-color: transparent;
 	border-top-color: transparent;
 	border-right-color: transparent;
@@ -160,6 +160,6 @@ a h6:hover {
 }
 
 grey {
-	color: #bdc3c7;
+	color: #ea4a3c;
 	font-weight: 700;
 }
