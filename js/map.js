@@ -18,13 +18,6 @@ function initialize() {
 
   var searchBox = new google.maps.places.SearchBox((input));
 
-  function clearOverlays() {
-    for (var i = 0; i < markers.length; i++ ) {
-    markers[i].setMap(null);
-    }
-    markers.length = 0;
-  }
-
   google.maps.event.addListener(searchBox, 'places_changed', function() {
     var places = searchBox.getPlaces();
 
@@ -38,16 +31,14 @@ function initialize() {
         point.extend(place.geometry.location);
     }
 
-    clearOverlays();
     markers = [];
     map.fitBounds(point);
     map.setZoom(9);
-
     var coords = map.getBounds();
-    
     $.ajax({
       url: "http://api.geonames.org/earthquakesJSON?north="+coords.ya.j+"&south="+coords.ya.k+"&east="+coords.pa.k+"&west=" + coords.pa.j + "&maxRows=20&username=jnations1214",
       success: function(data) {
+        console.log(data.earthquakes);
         $.each(data.earthquakes, function( index, value ) {
           var point = new google.maps.LatLng(value.lat,value.lng);
           var marker = new google.maps.Marker({
@@ -59,7 +50,6 @@ function initialize() {
           marker.info = new google.maps.InfoWindow({
            content: '<p><b>Date: </b>' + value.datetime+ '</p><p><b>Magnitude: </b>' + value.magnitude + '</p>'
           });
-          markers.push(marker);
           google.maps.event.addListener(marker, 'mouseover', function() {
             marker.info.open(map, marker);
           });
