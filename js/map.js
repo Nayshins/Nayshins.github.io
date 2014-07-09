@@ -44,9 +44,10 @@ function initialize() {
     map.setZoom(9);
 
     var coords = map.getBounds();
+    console.log(coords);
     
     $.ajax({
-      url: "http://api.geonames.org/earthquakesJSON?north="+coords.ya.j+"&south="+coords.ya.k+"&east="+coords.pa.k+"&west=" + coords.pa.j + "&maxRows=20&username=jnations1214",
+      url: "http://api.geonames.org/earthquakesJSON?north="+coords.xa.j+"&south="+coords.xa.k+"&east="+coords.pa.k+"&west=" + coords.pa.j + "&maxRows=20&username=jnations1214",
       success: function(data) {
         $.each(data.earthquakes, function( index, value ) {
           var point = new google.maps.LatLng(value.lat,value.lng);
