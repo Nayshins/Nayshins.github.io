@@ -1,6 +1,6 @@
 Oh, What a glorious day! That program you have been working on for many days is finally done, and you are now ready to share it with the world. Well almost... While going over your code from the previous day's work, you have noticed that your code has started to develop a certain odor. This odor should not actually smell (if it does, maybe you need a shower), but instead it is  some working code that could turn into a problem in the future. Take sushi for example, a bad piece of fish is still sushi, but it could lead to (intestinal) problems in the future. Just like bad fish, code smells are something that you want to actively remove from your codebase.
 
-Today during a code review with my mentor, we uncovered a odoriferous method within my Tic Tac Toe game loop.
+Today during a code review with my mentor, we uncovered a particularly odoriferous method within my Tic Tac Toe game loop.
 
 {% highlight java %}
 while (!rules.gameOver(board)){
@@ -62,9 +62,9 @@ Currently each player object has its own separate method selectMove(), but since
 
 {% highlight java %}
 while (!rules.gameOver(board)){
-   	currentPlayer.selectMove();
-      console.printBoard();
-      switchPlayers();
+	currentPlayer.selectMove();
+ 	console.printBoard();
+ 	switchPlayers();
 }
 {% endhighlight%}
 
