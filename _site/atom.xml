@@ -4,7 +4,7 @@
  <title>Investing in Myself</title>
  <link href="http://jakenations.me/atom.xml" rel="self"/>
  <link href="http://jakenations.me/"/>
- <updated>2014-09-17T09:21:51-05:00</updated>
+ <updated>2014-09-26T15:11:08-05:00</updated>
  <id>http://jakenations.me</id>
  <author>
    <name>Jake Nations</name>
@@ -13,54 +13,155 @@
 
  
  <entry>
+   <title>How To Make Android Emulator Faster</title>
+   <link href="http://jakenations.me/2014/09/26/how-to-make-android-emulator-faster/"/>
+   <updated>2014-09-26T00:00:00-05:00</updated>
+   <id>http://jakenations.me/2014/09/26/how-to-make-android-emulator-faster</id>
+   <content type="html">&lt;p&gt;As I described in my previous blog, one of the largest complaints that I have had while building my android app has been the speed of the emulator. Yesterday I decided that something had to be done about it because my previously quick Tic Tac Toe algorithm had become abysmally slow. What used to take less than a second on the console, was now taking over 10 seconds. It was time to do some research and figure out how to make it faster.&lt;/p&gt;
+
+&lt;h2&gt;Graphics Acceleration&lt;/h2&gt;
+
+&lt;p&gt;The main reason that the emulator is slow is simply the fact that it is an emulator. Emulators are inherently slow because what they do is make a software representation of a piece of hardware, and the software copy is nowhere near as powerful as the hardware device. This is especially true when it comes to graphics processing.  &lt;/p&gt;
+
+&lt;p&gt;The Android SDK now allows you to enable graphics acceleration. When enabled, this moves the graphics processing from inside the emulator to the dedicated graphics processing unit (GPU)  that is built into your computer. When enabled you should see a drastic improvement in the way the graphics load on the emulator.&lt;/p&gt;
+
+&lt;p&gt;The only thing that you must do in order to implement the graphics acceleration on the Android Virtual Device (AVD) is to set GPU emulation to yes during the initial set up of the device. That&amp;#39;s it. If you are using Android Studio as your IDE this is what the check box looks like:
+&lt;img src=&quot;http://i58.tinypic.com/w2k9zb.png&quot; alt=&quot;GPU acceleration&quot;&gt;&lt;/p&gt;
+
+&lt;p&gt;After setting this option, and restarting the emulator you should notice a difference in the quality of the graphics rendered.&lt;/p&gt;
+
+&lt;h2&gt;Processor Acceleration&lt;/h2&gt;
+
+&lt;p&gt;This is also a problem that has the same root as the graphics, the emulator is trying to emulate the processor instead of using the processor that is running your computer. If you are using one of the newer intel processors, you have an option to install a hardware accelerator that will make the emulator an order of magnitude faster.  &lt;/p&gt;
+
+&lt;p&gt;The first step in order to implement processor acceleration is to download the Intel Hardware Accelerated Execution Manager (HAXM). You can download that &lt;a href=&quot;https://software.intel.com/en-us/android/articles/intel-hardware-accelerated-execution-manager&quot;&gt;here at intel.&lt;/a&gt; check to make sure the that the HAXM is running by going to your console and running: &lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;kextstat &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; grep intel&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;This should return a status message that contains the following extension name:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;com.intel.kext.intelhaxm&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;If you don&amp;#39;t see the message, make sure that you have properly installed the HAXM.&lt;/p&gt;
+
+&lt;p&gt;Once you have installed the HAXM, you will need to download the x86 Emulator System Image. Since most android phones use an ARM processor, this allows you to run an emulator that matches your computers processor architecture instead of having to emulate an ARM core. You can download the system image &lt;a href=&quot;https://software.intel.com/en-us/android/articles/android-44-kitkat-x86-emulator-system-image&quot;&gt;here.&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;After you have downloaded and installed the system image, go to the AVD manager where you enabled the GPU acceleration. In the drop down box called CPU/ABI, select the Intel Atom (x86) processor. 
+&lt;img src=&quot;http://i62.tinypic.com/122i1cx.png&quot; alt=&quot;Processor&quot;&gt;&lt;/p&gt;
+
+&lt;h2&gt;Boot It Up&lt;/h2&gt;
+
+&lt;p&gt;Now that you have enabled these two steps, boot up your emulator and you should see a noticeable improvement in its speed. In another blog post I will go over some changes that you can do to your program that will make it run faster as well.&lt;/p&gt;
+</content>
+ </entry>
+ 
+ <entry>
+   <title>Android</title>
+   <link href="http://jakenations.me/2014/09/25/android/"/>
+   <updated>2014-09-25T00:00:00-05:00</updated>
+   <id>http://jakenations.me/2014/09/25/android</id>
+   <content type="html">&lt;p&gt;After completing my second iteration of Tic Tac toe, I was given the next iteration of the application, port it to an android app. This is my first foray in the world of mobile development, and it has gotten off to a slow but steady start. Even though it has gotten off to a slow start, as I am getting used to the android API&amp;#39;s, it had become a much smoother process. One of the challenges I faced even before I could write any code, was to get the android virtual machine working on my computer. As I do not have an android phone, this was the only was for me to execute and interact with the code that I have written so far. Another challenge I faced was learning how to use the XML based layouts for the user interface. It felt a bit clumsy at first, but after some time writing it, it began to feel like I was writing HTML which is very easy to me.&lt;/p&gt;
+
+&lt;p&gt;Now that we got the bad parts out of the way, I can talk about what I have enjoyed so far and what I am looking forward to. I am glad that I took the time to figure out how gradle works because it has been an invaluable resource in building my original tic tac toe into a .jar file. Since android uses gradle as well, I was able to quickly set my original code as a dependency and was able to access all of the game methods from within my android app. Once I got it all wired up, I was able to play a simple game of tic tac toe on the VM. Now that I have my simple game working, I need to build it out to be as functional as my console based version. This means that I will need to add a replay function and the ability to run the game on a 4 x 4 board as well.&lt;/p&gt;
+
+&lt;p&gt;This leads me to what I am looking forward to the most, using threads to move the game process to run in the background of the main UI thread. I have noticed that the Negamax algorithm runs much slower on the phone than on the computer, and if I did not move it to a background process for a 4 x 4 board, the algorithm will certainly crash the application. I have been doing a lot of reading about threading lately, and I am excited to get my first start on it. &lt;/p&gt;
+</content>
+ </entry>
+ 
+ <entry>
+   <title>Optimizing</title>
+   <link href="http://jakenations.me/2014/09/22/optimizing/"/>
+   <updated>2014-09-22T00:00:00-05:00</updated>
+   <id>http://jakenations.me/2014/09/22/optimizing</id>
+   <content type="html">&lt;p&gt;Over the weekend, I spent a fair amount of time researching how to make my Tic Tac Toe algorithm faster on a large board. While I expanded my knowledge on game tree searching algorithms, the actual process of implementing such a process into my algorithm was rather difficult. I spent a few hours this morning trying to implement a transposition table in my Tic Tac Toe algorithm to make it run at a more acceptable speed. A transposition table is a hash-map that stores board state as the key, and all other necessary data as the value. However when I tried to implement it into my algorithm, I was unable to find the proper place to set the key value, and because of this, it caused my algorithm to no longer work as intended. &lt;/p&gt;
+
+&lt;p&gt;Transposition tables are normally used in chess algorithms where possible outcomes are orders and orders of magnitude higher than a four by four Tic Tac Toe board, so by using this approach I was essentially trying to kill a fly with a bazooka. While almost on the verge of giving up, I stumbled upon a small error in my alpha beta break. With just this fix, I made my algorithm run at the speeds at which I wanted. &lt;/p&gt;
+
+&lt;p&gt;Even though my algorithm is fully backed by automated tests, the error was not able to be picked up by the test suite. This is because it was not a functionality breaking error, but instead, it just caused the alpha beta break not to be called as often as it should have been. The only way to tell if was working as intended was to play the game and see how fast it would run. Even with the error in the alpha beta break, the program ran faster than when it did not have it, so I assumed that everything was working as intended. &lt;/p&gt;
+
+&lt;p&gt;In conclusion, check to make sure your code is working as you intended before you start bringing out the bazookas to &amp;quot;fix&amp;quot; it. &lt;/p&gt;
+</content>
+ </entry>
+ 
+ <entry>
+   <title>Progress</title>
+   <link href="http://jakenations.me/2014/09/18/progress/"/>
+   <updated>2014-09-18T00:00:00-05:00</updated>
+   <id>http://jakenations.me/2014/09/18/progress</id>
+   <content type="html">&lt;p&gt;Two weeks in, and I am loving every minute of my apprenticeship at 8th Light. This week I have extended my Tic Tac Toe game to be able to play on a 4x4 board, and have set it to allow any combination of human and computer players to play each other. While all of the new features are working, the computer player on the 4x4 is considerably slower than on a 3x3 board. The first few moves by the computer take upwards of 10 seconds, but as the board fills up its choices are near instantaneous. I have been researching a few options on how to speed up the computer player, and the options are: store boards and their values in a hash map, or to use a method called iterative deepening on the negamax tree search. Both options will need more research, but I am leaning towards using the hashing method. &lt;/p&gt;
+
+&lt;p&gt;Along with the work  on Tic Tac Toe, I have started reading Clean Code by Bob Martin, and the book is helping me to become more aware of the SOLID principles. I look forward to getting a bunch of reading and research in this weekend on both topics, so I can have some more intellectual fuel for my next blog posts.&lt;/p&gt;
+</content>
+ </entry>
+ 
+ <entry>
    <title>Got Smells?</title>
    <link href="http://jakenations.me/2014/09/15/got-smells%3F/"/>
    <updated>2014-09-15T00:00:00-05:00</updated>
    <id>http://jakenations.me/2014/09/15/got-smells?</id>
-   <content type="html">&lt;p&gt;Oh, What a glorious day! That program you have been working on for many days is finally done, and you are now ready to share it with the world. Well almost... While going over your code from the previous day&amp;#39;s work, you have noticed that your code has started to develop a certain odor. This odor should not actually smell (if it does, maybe you need a shower), but instead it is  some working code that could turn into a problem in the future. Take sushi for example, a bad piece of fish is still sushi, but it could lead to (intestinal) problems in the future. Just like bad fish, code smells are something that you want to actively remove from your codebase.&lt;/p&gt;
+   <content type="html">&lt;p&gt;Oh, What a glorious day! That program you have been working on for many days is finally done, and you are now ready to share it with the world. Well almost... While going over your code from the previous day&amp;#39;s work, you have noticed that your code has started to develop a certain odor, also known as code smells. This odor should not actually smell (if it does, maybe you need a shower), but instead it is  some working code that could turn into a problem in the future. Take sushi for example, a bad piece of fish is still sushi, but it could lead to (intestinal) problems in the future. Just like bad fish, code smells are something that you want to actively remove from your codebase.&lt;/p&gt;
 
 &lt;p&gt;Today during a code review with my mentor, we uncovered a odoriferous method within my Tic Tac Toe game loop.&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(!&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rules&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;gameOver&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;board&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)){&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;currentPlayer&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;instanceof&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;HumanPlayer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;){&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;                &lt;span class=&quot;n&quot;&gt;currentPlayer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;selectMove&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;currentPlayer&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;instanceof&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ComputerPlayer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;                &lt;span class=&quot;n&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;computerMove&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;                &lt;span class=&quot;n&quot;&gt;currentPlayer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;makeMove&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;currentPlayer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;unbeatableComputer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;            &lt;span class=&quot;n&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;printBoard&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-             &lt;span class=&quot;n&quot;&gt;switchPlayers&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-         &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+      &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;currentPlayer&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;instanceof&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;HumanPlayer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;){&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;currentPlayer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;selectMove&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+      &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;currentPlayer&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;instanceof&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ComputerPlayer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+             &lt;span class=&quot;n&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;computerMove&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+             &lt;span class=&quot;n&quot;&gt;currentPlayer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;makeMove&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;currentPlayer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;unbeatableComputer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
+      &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;printBoard&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;switchPlayers&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
-&lt;p&gt;The purpose of the above code is to determine whether the current player is a human or computer, and then call their class specific method to make a move. While the code works, what would happen if the requirements changed, and now an animal player must be added to the game as well? If I were to keep the same code structure it would look something like this :&lt;/p&gt;
+&lt;p&gt;The purpose of the above code is to determine whether the current player is a human or computer, and then call their class-specific method to make a move. While the code works, what would happen if the requirements changed, and now an animal player must be added to the game as well? If I were to keep the same code structure it would look something like this :&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(!&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rules&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;gameOver&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;board&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)){&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;currentPlayer&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;instanceof&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;HumanPlayer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;){&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;                &lt;span class=&quot;n&quot;&gt;currentPlayer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;selectMove&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;currentPlayer&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;instanceof&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ComputerPlayer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;                &lt;span class=&quot;n&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;computerMove&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;                &lt;span class=&quot;n&quot;&gt;currentPlayer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;makeMove&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;currentPlayer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;unbeatableComputer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;currentPlayer&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;instanceOf&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AnimalPlayer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;            &lt;span class=&quot;n&quot;&gt;currentPlayer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;animalMove&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;    
-&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;            &lt;span class=&quot;n&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;printBoard&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-             &lt;span class=&quot;n&quot;&gt;switchPlayers&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-         &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+       &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;currentPlayer&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;instanceof&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;HumanPlayer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;){&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;currentPlayer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;selectMove&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+       &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;currentPlayer&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;instanceof&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ComputerPlayer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+             &lt;span class=&quot;n&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;computerMove&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+             &lt;span class=&quot;n&quot;&gt;currentPlayer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;makeMove&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;currentPlayer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;unbeatableComputer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
+       &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;currentPlayer&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;instanceOf&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AnimalPlayer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+             &lt;span class=&quot;n&quot;&gt;currentPlayer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;animalMove&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+       &lt;span class=&quot;n&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;printBoard&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+       &lt;span class=&quot;n&quot;&gt;switchPlayers&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
-&lt;p&gt;The only way to get this program to continue functioning in it&amp;#39;s current state is to add another statement to the conditional. This is not a sustainable fix to the problem because if another type of player is added to the game, the pattern of adding statements to the conditional will continue, and this method will begin to bloat in size. This is not good, and something has to be done to prevent the coming bloat.&lt;/p&gt;
+&lt;p&gt;The only way to get this program to continue functioning in its current state is to add another statement to the conditional. This is not a sustainable fix to the problem because if another type of player is added to the game, the pattern of adding statements to the conditional will continue, and this method will begin to bloat in size. This is not good, and something has to be done to prevent the coming bloat.&lt;/p&gt;
 
-&lt;p&gt;In his book &lt;em&gt;Refactoring&lt;/em&gt;, Martin Fowler describes this code smell as: &amp;quot;You have a conditional that chooses different behavior depending on the type of an object.&amp;quot; This statement accurately describes the situation the code is in because the conditional selects the appropriate make move method for each type of object. Luckily, this is a book about refactoring, and Martin gives a solution to refactor the problem code: &amp;quot;Move each leg of the conditional to an overriding method in a subclass. Make the original method abstract.&amp;quot; While his solution makes sense, it uses a bit of jargon, so lets break it down into steps.&lt;/p&gt;
+&lt;p&gt;In his book &lt;em&gt;Refactoring&lt;/em&gt;, Martin Fowler describes this code smell as such: &amp;quot;You have a conditional that chooses different behavior depending on the type of an object.&amp;quot; This statement accurately describes the situation the code is in because the conditional selects the appropriate makeMove() method for each type of object. Luckily, this is a book about refactoring, and Martin gives a solution to refactor the problem code: &amp;quot;Move each leg of the conditional to an overriding method in a subclass. Make the original method abstract.&amp;quot; While his solution makes sense, it uses a bit of jargon, so let’s break it down into steps.&lt;/p&gt;
 
-&lt;p&gt;&lt;message&gt; Move each leg of the conditional to an overriding method in a subclass. &lt;/message&gt;&lt;/p&gt;
+&lt;p&gt;The first step in the refactoring process is to change each leg of the conditional into a method that shares the same name but does something different. This is called an overriding method because it will override an inherited method with the method you specified in the subclass. After making this change the code will look something like this:&lt;/p&gt;
 
-&lt;p&gt;&lt;message&gt; Make the original method abstract &lt;/message&gt;&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(!&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rules&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;gameOver&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;board&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)){&lt;/span&gt;
+       &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;currentPlayer&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;instanceof&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;HumanPlayer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;){&lt;/span&gt;
+             &lt;span class=&quot;n&quot;&gt;currentPlayer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;selectMove&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+       &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;currentPlayer&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;instanceof&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ComputerPlayer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+           &lt;span class=&quot;n&quot;&gt;currentPlayer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;selectMove&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+       &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;currentPlayer&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;instanceOf&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AnimalPlayer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+                        &lt;span class=&quot;n&quot;&gt;currentPlayer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;selectMove&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+       &lt;span class=&quot;n&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;printBoard&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+       &lt;span class=&quot;n&quot;&gt;switchPlayers&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;what is the fix?&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;polymorphism&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;show UML&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;show result&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
+&lt;p&gt;Completing the first step has cleaned up each leg of the conditional, but the method still requires the conditional statement in order to run. In order to remove the conditional statement from the code entirely, the second step, making the original method abstract, must be completed. To clarify what this means, let’s take a look at a model of the current class structure:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://i57.tinypic.com/2h31r80.png&quot; alt=&quot;UML&quot;&gt;&lt;/p&gt;
+
+&lt;p&gt;Currently each player object has its own separate method selectMove(), but since each is a subclass of Player, we can set selectMove() as an abstract method in the player class. Doing so will allow us to remove the conditional from the method, and call selectMove() on any player object. This will allow us to access the intended behavior from each object without the need for a long and complicated conditional statement. Here are the results from the refactor:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://i58.tinypic.com/14slgt1.png&quot; alt=&quot;UML2&quot;&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(!&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rules&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;gameOver&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;board&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)){&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;currentPlayer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;selectMove&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;printBoard&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;switchPlayers&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Look at that! After making the changes to the player objects, there is no longer a need for the bloated conditional statement, and the method no longer needs to know the specific type of object it is currently dealing with. This is made possible by the object-oriented principle of polymorphism. Polymorphism comes from the Greek words many and forms, and that is exactly how the player class now acts: it has many forms. Because they all share the same superclass, the player objects are now hidden from the rest of the program, but they still produce the same behaviors. Removing smells such as this will make your program much more extensible as requirements change over time.&lt;/p&gt;
 </content>
  </entry>
  

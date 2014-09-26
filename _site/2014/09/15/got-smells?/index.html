@@ -1,44 +1,63 @@
-<p>Oh, What a glorious day! That program you have been working on for many days is finally done, and you are now ready to share it with the world. Well almost... While going over your code from the previous day&#39;s work, you have noticed that your code has started to develop a certain odor. This odor should not actually smell (if it does, maybe you need a shower), but instead it is  some working code that could turn into a problem in the future. Take sushi for example, a bad piece of fish is still sushi, but it could lead to (intestinal) problems in the future. Just like bad fish, code smells are something that you want to actively remove from your codebase.</p>
+<p>Oh, What a glorious day! That program you have been working on for many days is finally done, and you are now ready to share it with the world. Well almost... While going over your code from the previous day&#39;s work, you have noticed that your code has started to develop a certain odor, also known as code smells. This odor should not actually smell (if it does, maybe you need a shower), but instead it is  some working code that could turn into a problem in the future. Take sushi for example, a bad piece of fish is still sushi, but it could lead to (intestinal) problems in the future. Just like bad fish, code smells are something that you want to actively remove from your codebase.</p>
 
 <p>Today during a code review with my mentor, we uncovered a odoriferous method within my Tic Tac Toe game loop.</p>
 
 <div class="highlight"><pre><code class="language-java" data-lang="java"><span class="k">while</span> <span class="o">(!</span><span class="n">rules</span><span class="o">.</span><span class="na">gameOver</span><span class="o">(</span><span class="n">board</span><span class="o">)){</span>
-<span class="o">-</span>            <span class="k">if</span> <span class="o">(</span><span class="n">currentPlayer</span> <span class="k">instanceof</span> <span class="n">HumanPlayer</span><span class="o">){</span>
-<span class="o">-</span>                <span class="n">currentPlayer</span><span class="o">.</span><span class="na">selectMove</span><span class="o">();</span>
-<span class="o">-</span>            <span class="o">}</span> <span class="k">else</span> <span class="nf">if</span><span class="o">(</span><span class="n">currentPlayer</span> <span class="k">instanceof</span> <span class="n">ComputerPlayer</span><span class="o">)</span> <span class="o">{</span>
-<span class="o">-</span>                <span class="n">console</span><span class="o">.</span><span class="na">computerMove</span><span class="o">();</span>
-<span class="o">-</span>                <span class="n">currentPlayer</span><span class="o">.</span><span class="na">makeMove</span><span class="o">(</span><span class="n">currentPlayer</span><span class="o">.</span><span class="na">unbeatableComputer</span><span class="o">());</span>
-<span class="o">-</span>            <span class="o">}</span>
-<span class="o">-</span>            <span class="n">console</span><span class="o">.</span><span class="na">printBoard</span><span class="o">();</span>
-             <span class="n">switchPlayers</span><span class="o">();</span>
-         <span class="o">}</span></code></pre></div>
+      <span class="k">if</span> <span class="o">(</span><span class="n">currentPlayer</span> <span class="k">instanceof</span> <span class="n">HumanPlayer</span><span class="o">){</span>
+            <span class="n">currentPlayer</span><span class="o">.</span><span class="na">selectMove</span><span class="o">();</span>
+      <span class="o">}</span> <span class="k">else</span> <span class="nf">if</span><span class="o">(</span><span class="n">currentPlayer</span> <span class="k">instanceof</span> <span class="n">ComputerPlayer</span><span class="o">)</span> <span class="o">{</span>
+             <span class="n">console</span><span class="o">.</span><span class="na">computerMove</span><span class="o">();</span>
+             <span class="n">currentPlayer</span><span class="o">.</span><span class="na">makeMove</span><span class="o">(</span><span class="n">currentPlayer</span><span class="o">.</span><span class="na">unbeatableComputer</span><span class="o">());</span>
+      <span class="o">}</span>
+      <span class="n">console</span><span class="o">.</span><span class="na">printBoard</span><span class="o">();</span>
+      <span class="n">switchPlayers</span><span class="o">();</span>
+<span class="o">}</span></code></pre></div>
 
-<p>The purpose of the above code is to determine whether the current player is a human or computer, and then call their class specific method to make a move. While the code works, what would happen if the requirements changed, and now an animal player must be added to the game as well? If I were to keep the same code structure it would look something like this :</p>
+<p>The purpose of the above code is to determine whether the current player is a human or computer, and then call their class-specific method to make a move. While the code works, what would happen if the requirements changed, and now an animal player must be added to the game as well? If I were to keep the same code structure it would look something like this :</p>
 
 <div class="highlight"><pre><code class="language-java" data-lang="java"><span class="k">while</span> <span class="o">(!</span><span class="n">rules</span><span class="o">.</span><span class="na">gameOver</span><span class="o">(</span><span class="n">board</span><span class="o">)){</span>
-<span class="o">-</span>            <span class="k">if</span> <span class="o">(</span><span class="n">currentPlayer</span> <span class="k">instanceof</span> <span class="n">HumanPlayer</span><span class="o">){</span>
-<span class="o">-</span>                <span class="n">currentPlayer</span><span class="o">.</span><span class="na">selectMove</span><span class="o">();</span>
-<span class="o">-</span>            <span class="o">}</span> <span class="k">else</span> <span class="nf">if</span><span class="o">(</span><span class="n">currentPlayer</span> <span class="k">instanceof</span> <span class="n">ComputerPlayer</span><span class="o">)</span> <span class="o">{</span>
-<span class="o">-</span>                <span class="n">console</span><span class="o">.</span><span class="na">computerMove</span><span class="o">();</span>
-<span class="o">-</span>                <span class="n">currentPlayer</span><span class="o">.</span><span class="na">makeMove</span><span class="o">(</span><span class="n">currentPlayer</span><span class="o">.</span><span class="na">unbeatableComputer</span><span class="o">());</span>
-<span class="o">-</span>            <span class="o">}</span> <span class="k">else</span> <span class="nf">if</span> <span class="o">(</span><span class="n">currentPlayer</span> <span class="n">instanceOf</span> <span class="n">AnimalPlayer</span><span class="o">)</span> <span class="o">{</span>
-<span class="o">-</span>            <span class="n">currentPlayer</span><span class="o">.</span><span class="na">animalMove</span><span class="o">();</span>
-<span class="o">-</span>        <span class="o">}</span>    
-<span class="o">-</span>            <span class="n">console</span><span class="o">.</span><span class="na">printBoard</span><span class="o">();</span>
-             <span class="n">switchPlayers</span><span class="o">();</span>
-         <span class="o">}</span></code></pre></div>
+       <span class="k">if</span> <span class="o">(</span><span class="n">currentPlayer</span> <span class="k">instanceof</span> <span class="n">HumanPlayer</span><span class="o">){</span>
+            <span class="n">currentPlayer</span><span class="o">.</span><span class="na">selectMove</span><span class="o">();</span>
+       <span class="o">}</span> <span class="k">else</span> <span class="nf">if</span><span class="o">(</span><span class="n">currentPlayer</span> <span class="k">instanceof</span> <span class="n">ComputerPlayer</span><span class="o">)</span> <span class="o">{</span>
+             <span class="n">console</span><span class="o">.</span><span class="na">computerMove</span><span class="o">();</span>
+             <span class="n">currentPlayer</span><span class="o">.</span><span class="na">makeMove</span><span class="o">(</span><span class="n">currentPlayer</span><span class="o">.</span><span class="na">unbeatableComputer</span><span class="o">());</span>
+       <span class="o">}</span> <span class="k">else</span> <span class="nf">if</span> <span class="o">(</span><span class="n">currentPlayer</span> <span class="n">instanceOf</span> <span class="n">AnimalPlayer</span><span class="o">)</span> <span class="o">{</span>
+             <span class="n">currentPlayer</span><span class="o">.</span><span class="na">animalMove</span><span class="o">();</span>
+        <span class="o">}</span>
+       <span class="n">console</span><span class="o">.</span><span class="na">printBoard</span><span class="o">();</span>
+       <span class="n">switchPlayers</span><span class="o">();</span>
+<span class="o">}</span></code></pre></div>
 
-<p>The only way to get this program to continue functioning in it&#39;s current state is to add another statement to the conditional. This is not a sustainable fix to the problem because if another type of player is added to the game, the pattern of adding statements to the conditional will continue, and this method will begin to bloat in size. This is not good, and something has to be done to prevent the coming bloat.</p>
+<p>The only way to get this program to continue functioning in its current state is to add another statement to the conditional. This is not a sustainable fix to the problem because if another type of player is added to the game, the pattern of adding statements to the conditional will continue, and this method will begin to bloat in size. This is not good, and something has to be done to prevent the coming bloat.</p>
 
-<p>In his book <em>Refactoring</em>, Martin Fowler describes this code smell as: &quot;You have a conditional that chooses different behavior depending on the type of an object.&quot; This statement accurately describes the situation the code is in because the conditional selects the appropriate make move method for each type of object. Luckily, this is a book about refactoring, and Martin gives a solution to refactor the problem code: &quot;Move each leg of the conditional to an overriding method in a subclass. Make the original method abstract.&quot; While his solution makes sense, it uses a bit of jargon, so lets break it down into steps.</p>
+<p>In his book <em>Refactoring</em>, Martin Fowler describes this code smell as such: &quot;You have a conditional that chooses different behavior depending on the type of an object.&quot; This statement accurately describes the situation the code is in because the conditional selects the appropriate makeMove() method for each type of object. Luckily, this is a book about refactoring, and Martin gives a solution to refactor the problem code: &quot;Move each leg of the conditional to an overriding method in a subclass. Make the original method abstract.&quot; While his solution makes sense, it uses a bit of jargon, so let’s break it down into steps.</p>
 
-<p><message> Move each leg of the conditional to an overriding method in a subclass. </message></p>
+<p>The first step in the refactoring process is to change each leg of the conditional into a method that shares the same name but does something different. This is called an overriding method because it will override an inherited method with the method you specified in the subclass. After making this change the code will look something like this:</p>
 
-<p><message> Make the original method abstract </message></p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="k">while</span> <span class="o">(!</span><span class="n">rules</span><span class="o">.</span><span class="na">gameOver</span><span class="o">(</span><span class="n">board</span><span class="o">)){</span>
+       <span class="k">if</span> <span class="o">(</span><span class="n">currentPlayer</span> <span class="k">instanceof</span> <span class="n">HumanPlayer</span><span class="o">){</span>
+             <span class="n">currentPlayer</span><span class="o">.</span><span class="na">selectMove</span><span class="o">();</span>
+       <span class="o">}</span> <span class="k">else</span> <span class="nf">if</span><span class="o">(</span><span class="n">currentPlayer</span> <span class="k">instanceof</span> <span class="n">ComputerPlayer</span><span class="o">)</span> <span class="o">{</span>
+           <span class="n">currentPlayer</span><span class="o">.</span><span class="na">selectMove</span><span class="o">();</span>
+       <span class="o">}</span> <span class="k">else</span> <span class="nf">if</span> <span class="o">(</span><span class="n">currentPlayer</span> <span class="n">instanceOf</span> <span class="n">AnimalPlayer</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="n">currentPlayer</span><span class="o">.</span><span class="na">selectMove</span><span class="o">();</span>
+            <span class="o">}</span>
+       <span class="n">console</span><span class="o">.</span><span class="na">printBoard</span><span class="o">();</span>
+       <span class="n">switchPlayers</span><span class="o">();</span>
+<span class="o">}</span></code></pre></div>
 
-<ul>
-<li><p>what is the fix?</p></li>
-<li><p>polymorphism</p></li>
-<li><p>show UML</p></li>
-<li><p>show result</p></li>
-</ul>
+<p>Completing the first step has cleaned up each leg of the conditional, but the method still requires the conditional statement in order to run. In order to remove the conditional statement from the code entirely, the second step, making the original method abstract, must be completed. To clarify what this means, let’s take a look at a model of the current class structure:</p>
+
+<p><img src="http://i57.tinypic.com/2h31r80.png" alt="UML"></p>
+
+<p>Currently each player object has its own separate method selectMove(), but since each is a subclass of Player, we can set selectMove() as an abstract method in the player class. Doing so will allow us to remove the conditional from the method, and call selectMove() on any player object. This will allow us to access the intended behavior from each object without the need for a long and complicated conditional statement. Here are the results from the refactor:</p>
+
+<p><img src="http://i58.tinypic.com/14slgt1.png" alt="UML2"></p>
+
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="k">while</span> <span class="o">(!</span><span class="n">rules</span><span class="o">.</span><span class="na">gameOver</span><span class="o">(</span><span class="n">board</span><span class="o">)){</span>
+      <span class="n">currentPlayer</span><span class="o">.</span><span class="na">selectMove</span><span class="o">();</span>
+      <span class="n">console</span><span class="o">.</span><span class="na">printBoard</span><span class="o">();</span>
+      <span class="n">switchPlayers</span><span class="o">();</span>
+<span class="o">}</span></code></pre></div>
+
+<p>Look at that! After making the changes to the player objects, there is no longer a need for the bloated conditional statement, and the method no longer needs to know the specific type of object it is currently dealing with. This is made possible by the object-oriented principle of polymorphism. Polymorphism comes from the Greek words many and forms, and that is exactly how the player class now acts: it has many forms. Because they all share the same superclass, the player objects are now hidden from the rest of the program, but they still produce the same behaviors. Removing smells such as this will make your program much more extensible as requirements change over time.</p>
