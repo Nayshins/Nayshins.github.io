@@ -2,7 +2,7 @@
 layout: page
 title: About
 ---
-jake is a lifelong learner dedicated to learning new things and pushing his
+Jake is a lifelong learner dedicated to learning new things and pushing his
 boundaries. He graduated from Indiana University with a degree in Economics, and
 after a short stint working in finance, made the decision to start learning how
 to program. After some time teaching himself, he attended Dev Bootcamp in
