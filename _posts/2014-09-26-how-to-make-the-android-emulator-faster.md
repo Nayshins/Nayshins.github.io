@@ -1,3 +1,8 @@
+---
+layout: post
+title: How to make the Android Emulator Faster
+---
+
 As I described in my previous blog, one of the largest complaints that I have had while building my android app has been the speed of the emulator. Yesterday I decided that something had to be done about it because my previously quick Tic Tac Toe algorithm had become abysmally slow. What used to take less than a second on the console, was now taking over 10 seconds. It was time to do some research and figure out how to make it faster.
 
 ##Graphics Acceleration
