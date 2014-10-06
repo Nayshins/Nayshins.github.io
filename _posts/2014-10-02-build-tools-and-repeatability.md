@@ -4,7 +4,8 @@ title: Build Tools
 ---
 
 Over the last few weeks, I have been working exclusively with Java to build my Tic Tac Toe applications. Since Java is a compiled language, source code must be compiled before it can be run.  The compiler converts your human readable source code into computer readable byte code, and once your code is compiled, your code is now executable and can be run. This process has to be done each time the source code changes in order for the changes that were made to be available in the program. This process can be done manually by compiling and building a .jar file (Java Executable file) in your IDE, and then you can manually run the .jar file by running 
-{% highlight shell %}
+
+{% highlight bash %}
 java -jar <.jar file here> 
 {% endhighlight %}	This process works well when you have a small project that you are working on, but when you get to a larger project, there are a lot more things to do than just compiling and running.  This is where an automated build tool comes in very handy. An automated build tool is a program that automates the creation of executable software from source code, and many other tasks that are needed on larger projects. 
 	

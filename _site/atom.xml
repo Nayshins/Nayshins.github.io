@@ -4,7 +4,7 @@
  <title>Investing in Myself</title>
  <link href="http://jakenations.me/atom.xml" rel="self"/>
  <link href="http://jakenations.me/"/>
- <updated>2014-09-26T15:11:08-05:00</updated>
+ <updated>2014-10-06T08:59:54-05:00</updated>
  <id>http://jakenations.me</id>
  <author>
    <name>Jake Nations</name>
@@ -13,10 +13,124 @@
 
  
  <entry>
-   <title>How To Make Android Emulator Faster</title>
-   <link href="http://jakenations.me/2014/09/26/how-to-make-android-emulator-faster/"/>
+   <title>Using the Gradle Build Tool</title>
+   <link href="http://jakenations.me/2014/10/03/using-the-gradle-build-tool/"/>
+   <updated>2014-10-03T00:00:00-05:00</updated>
+   <id>http://jakenations.me/2014/10/03/using-the-gradle-build-tool</id>
+   <content type="html">&lt;p&gt;In my previous blog post, I discussed what an automated build tool is, and how using one in your project will benefit you and your team. Over the last few weeks, I have been working on 2 Java projects, a Tic Tac Toe Engine and an Android Tic Tac Toe that uses the engine as a dependency. Both of these projects use the Gradle build tool, and in this post I will show you how I set it up and what plugin does. &lt;/p&gt;
+
+&lt;p&gt;Before I go into my personal Gradle setup, I will explain what Gradle is, and why I chose it over other build tools.  The description from the Gradle website says: &lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Gradle combines the power and flexibility of Ant with the dependency management and conventions of Maven into a more effective way to build. Powered by a Groovy DSL and packed with innovation...&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;If we remove the buzzwords and jargon, the description could be summed up as: Gradle is a flexible build tool that can script common build tasks, and it follows the maven repository convention. Instead of using XML, Gradle uses Groovy, a dynamically typed language on the JVM, to describe the build. This results in a build file that contains a lot less boilerplate XML, and can be parsed easier by human readers. &lt;/p&gt;
+
+&lt;p&gt;There are a few reasons why I chose Gradle over Maven or Ant, but the greatest factor in me choosing to do so was the fact that it did not use XML in the build file. Compared to Ant or Maven, Gradle&amp;#39;s build file is very clean and easy to read because of the fact that it does not have any XML tags cluttering the information. Here is my build file for my Java Tic Tac Toe project: &lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-groovy&quot; data-lang=&quot;groovy&quot;&gt;&lt;span class=&quot;n&quot;&gt;apply&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;plugin:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;java&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;apply&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;plugin:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;application&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;apply&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;plugin:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;maven-publish&amp;#39;&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;mainClassName&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;me.jakenations.Main&amp;#39;&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;sourceCompatibility&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;1.6&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;targetCompatibility&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;1.6&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;sourceSets&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;java&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;srcDir&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;src/main/me/jakenations&amp;#39;&lt;/span&gt;
+            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;test&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;java&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;srcDir&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;src/test/me/jakenations&amp;#39;&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;jar&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;manifest&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;attributes&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;Main-Class&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;me.jakenations.Main&amp;#39;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;repositories&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;mavenCentral&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;dependencies&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;testCompile&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;group:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;junit&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;name:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;junit&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;version:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;4.+&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;test&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;systemProperties&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;property&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;value&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;run&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;standardInput&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;in&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;group&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;me.jakenations&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;version&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;1.0&amp;#39;&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;publishing&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;publications&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;mavenJava&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;MavenPublication&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;components&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;java&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;repositories&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;maven&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;url&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;http://s3.amazonaws.com/tttrepository/repository&amp;quot;&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+</content>
+ </entry>
+ 
+ <entry>
+   <title>Build Tools</title>
+   <link href="http://jakenations.me/2014/10/02/build-tools-and-repeatability/"/>
+   <updated>2014-10-02T00:00:00-05:00</updated>
+   <id>http://jakenations.me/2014/10/02/build-tools-and-repeatability</id>
+   <content type="html">&lt;p&gt;Over the last few weeks, I have been working exclusively with Java to build my Tic Tac Toe applications. Since Java is a compiled language, source code must be compiled before it can be run.  The compiler converts your human readable source code into computer readable byte code, and once your code is compiled, your code is now executable and can be run. This process has to be done each time the source code changes in order for the changes that were made to be available in the program. This process can be done manually by compiling and building a .jar file (Java Executable file) in your IDE, and then you can manually run the .jar file by running &lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;java -jar &amp;lt;.jar file here&amp;gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+    
+
+&lt;p&gt;This process works well when you have a small project that you are working on, but when you get to a larger project, there are a lot more things to do than just compiling and running.  This is where an automated build tool comes in very handy. An automated build tool is a program that automates the creation of executable software from source code, and many other tasks that are needed on larger projects. &lt;/p&gt;
+
+&lt;p&gt;One of the things that an automated build tool will do for you is running all of your tests before it builds the program, and if one of the tests fails, it will interrupt the build and tell you that a test failed. This is very helpful because it will alert you that something isn&amp;#39;t working, and it will prevent you from compiling and publishing broken code. &lt;/p&gt;
+
+&lt;p&gt;Another thing that automated build tools will do for you is take care of installing and maintaining the dependencies of the project. This means that the build tool knows what external libraries the project relies, and makes sure that the correct versions are installed. Most build tools can be pointed to a remote repository where the external library is stored, and then download and cache the correct version in your project.  &lt;/p&gt;
+
+&lt;p&gt;Along with getting the dependencies from remote repositories, most build tools will also be able to publish your program to a remote repository as well. While sounding very technical, a repository is a file structure that holds .jar files and artifacts that are needed to build the library. The way most repositories file structures are set up is: the organization, then the package name, and lastly the version. Using my Tic Tac Toe application as an example, the file structure of the remote repository looks like this &lt;strong&gt;me/jakenations/java-tic-tac-toe/1.0&lt;/strong&gt; .  This is a common file structure that is used by build tools in order to maintain a convention between programmers, so that built tools can get any dependency that is needed from a repository. &lt;/p&gt;
+
+&lt;p&gt;While build tools make programmers lives easier by taking care of these tasks automatically, they also help by making this process repeatable for anyone building the project. If configured correctly, everyone working on or with the project will have it build the same way without any extra effort. This is what I consider to be the most important aspect of the build tool because without this repeatability, programmers would be struggling to share projects with each other because the code will be different each time the code is built by someone else. &lt;/p&gt;
+
+&lt;p&gt;In my next blog post, I will go more in depth about how I used Gradle to build my Tic Tac Toe projects, and how you can create your own repository on Amazon S3.&lt;/p&gt;
+</content>
+ </entry>
+ 
+ <entry>
+   <title>OO Android</title>
+   <link href="http://jakenations.me/2014/10/01/still-android/"/>
+   <updated>2014-10-01T00:00:00-05:00</updated>
+   <id>http://jakenations.me/2014/10/01/still-android</id>
+   <content type="html">&lt;p&gt;This week I have completed my Tic Tac Toe Android app, and I am now working on refactoring and polishing it.  One of the major refactors that I completed was to remove the duplication of code that was shared between the activities of the same game type.&lt;/p&gt;
+
+&lt;p&gt;In order to do this I had to create an abstract activity class that contained the shared behaviors between the activities that controlled games versus humans and games versus computers. While this seems like a straightforward refactor, there were some snags because of the way that the activity class works. Because each subclass of the activity class must call an onCreate method that calls its superclass when it is created, I had to come up with a way for the base class to call all the way up to the Activity class. I was able to do this by having the base class call its super class and the super class to call the activity class, and it was able to start the new activity while sharing the behavior between two different activities.&lt;/p&gt;
+</content>
+ </entry>
+ 
+ <entry>
+   <title>How To Make The Android Emulator Faster</title>
+   <link href="http://jakenations.me/2014/09/26/how-to-make-the-android-emulator-faster/"/>
    <updated>2014-09-26T00:00:00-05:00</updated>
-   <id>http://jakenations.me/2014/09/26/how-to-make-android-emulator-faster</id>
+   <id>http://jakenations.me/2014/09/26/how-to-make-the-android-emulator-faster</id>
    <content type="html">&lt;p&gt;As I described in my previous blog, one of the largest complaints that I have had while building my android app has been the speed of the emulator. Yesterday I decided that something had to be done about it because my previously quick Tic Tac Toe algorithm had become abysmally slow. What used to take less than a second on the console, was now taking over 10 seconds. It was time to do some research and figure out how to make it faster.&lt;/p&gt;
 
 &lt;h2&gt;Graphics Acceleration&lt;/h2&gt;
@@ -25,8 +139,9 @@
 
 &lt;p&gt;The Android SDK now allows you to enable graphics acceleration. When enabled, this moves the graphics processing from inside the emulator to the dedicated graphics processing unit (GPU)  that is built into your computer. When enabled you should see a drastic improvement in the way the graphics load on the emulator.&lt;/p&gt;
 
-&lt;p&gt;The only thing that you must do in order to implement the graphics acceleration on the Android Virtual Device (AVD) is to set GPU emulation to yes during the initial set up of the device. That&amp;#39;s it. If you are using Android Studio as your IDE this is what the check box looks like:
-&lt;img src=&quot;http://i58.tinypic.com/w2k9zb.png&quot; alt=&quot;GPU acceleration&quot;&gt;&lt;/p&gt;
+&lt;p&gt;The only thing that you must do in order to implement the graphics acceleration on the Android Virtual Device (AVD) is to set GPU emulation to yes during the initial set up of the device. That&amp;#39;s it. If you are using Android Studio as your IDE this is what the check box looks like:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://i58.tinypic.com/w2k9zb.png&quot; alt=&quot;GPU acceleration&quot;&gt;&lt;/p&gt;
 
 &lt;p&gt;After setting this option, and restarting the emulator you should notice a difference in the quality of the graphics rendered.&lt;/p&gt;
 
@@ -46,8 +161,9 @@
 
 &lt;p&gt;Once you have installed the HAXM, you will need to download the x86 Emulator System Image. Since most android phones use an ARM processor, this allows you to run an emulator that matches your computers processor architecture instead of having to emulate an ARM core. You can download the system image &lt;a href=&quot;https://software.intel.com/en-us/android/articles/android-44-kitkat-x86-emulator-system-image&quot;&gt;here.&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;After you have downloaded and installed the system image, go to the AVD manager where you enabled the GPU acceleration. In the drop down box called CPU/ABI, select the Intel Atom (x86) processor. 
-&lt;img src=&quot;http://i62.tinypic.com/122i1cx.png&quot; alt=&quot;Processor&quot;&gt;&lt;/p&gt;
+&lt;p&gt;After you have downloaded and installed the system image, go to the AVD manager where you enabled the GPU acceleration. In the drop down box called CPU/ABI, select the Intel Atom (x86) processor.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://i62.tinypic.com/122i1cx.png&quot; alt=&quot;Processor&quot;&gt;&lt;/p&gt;
 
 &lt;h2&gt;Boot It Up&lt;/h2&gt;
 

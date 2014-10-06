@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Using the Gradle Build Tool &middot; Investing in Myself
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/hyde.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-144-precomposed.png">
+                                 <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+</head>
+
+
+  <body>
+
+    <div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <h1>Investing in Myself</h1>
+      <p class="lead">My adventures as a Resident Apprentice at 8th Light.</p>
+    </div>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+        <a href="/">Home</a>
+      </li>
+
+      
+
+      
+      
+        
+          
+        
+      
+        
+          
+            <li class="sidebar-nav-item">
+              <a href="/about/">About</a>
+            </li>
+          
+        
+      
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+
+      <li class="sidebar-nav-item"><a href="https://github.com/nayshins">GitHub</a></li>
+    </ul>
+
+    <p>&copy; 2014. All rights reserved.</p>
+  </div>
+</div>
+
+
+    <div class="content container">
+      <div class="post">
+  <h1 class="post-title">Using the Gradle Build Tool</h1>
+  <span class="post-date">03 Oct 2014</span>
+  <p>In my previous blog post, I discussed what an automated build tool is, and how using one in your project will benefit you and your team. Over the last few weeks, I have been working on 2 Java projects, a Tic Tac Toe Engine and an Android Tic Tac Toe that uses the engine as a dependency. Both of these projects use the Gradle build tool, and in this post I will show you how I set it up and what plugin does. </p>
+
+<p>Before I go into my personal Gradle setup, I will explain what Gradle is, and why I chose it over other build tools.  The description from the Gradle website says: </p>
+
+<blockquote>
+<p>Gradle combines the power and flexibility of Ant with the dependency management and conventions of Maven into a more effective way to build. Powered by a Groovy DSL and packed with innovation...</p>
+</blockquote>
+
+<p>If we remove the buzzwords and jargon, the description could be summed up as: Gradle is a flexible build tool that can script common build tasks, and it follows the maven repository convention. Instead of using XML, Gradle uses Groovy, a dynamically typed language on the JVM, to describe the build. This results in a build file that contains a lot less boilerplate XML, and can be parsed easier by human readers. </p>
+
+<p>There are a few reasons why I chose Gradle over Maven or Ant, but the greatest factor in me choosing to do so was the fact that it did not use XML in the build file. Compared to Ant or Maven, Gradle&#39;s build file is very clean and easy to read because of the fact that it does not have any XML tags cluttering the information. Here is my build file for my Java Tic Tac Toe project: </p>
+
+<div class="highlight"><pre><code class="language-groovy" data-lang="groovy"><span class="n">apply</span> <span class="nl">plugin:</span> <span class="s1">&#39;java&#39;</span>
+<span class="n">apply</span> <span class="nl">plugin:</span> <span class="s1">&#39;application&#39;</span>
+<span class="n">apply</span> <span class="nl">plugin:</span> <span class="s1">&#39;maven-publish&#39;</span>
+
+<span class="n">mainClassName</span> <span class="o">=</span> <span class="s1">&#39;me.jakenations.Main&#39;</span>
+
+<span class="n">sourceCompatibility</span> <span class="o">=</span> <span class="mf">1.6</span>
+<span class="n">targetCompatibility</span> <span class="o">=</span> <span class="mf">1.6</span>
+
+<span class="n">sourceSets</span> <span class="o">{</span>
+    <span class="n">main</span> <span class="o">{</span>
+        <span class="n">java</span><span class="o">{</span>
+            <span class="n">srcDir</span> <span class="s1">&#39;src/main/me/jakenations&#39;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="n">test</span> <span class="o">{</span>
+        <span class="n">java</span> <span class="o">{</span>
+            <span class="n">srcDir</span> <span class="s1">&#39;src/test/me/jakenations&#39;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="n">jar</span> <span class="o">{</span>
+    <span class="n">manifest</span> <span class="o">{</span>
+        <span class="n">attributes</span> <span class="s1">&#39;Main-Class&#39;</span><span class="o">:</span> <span class="s1">&#39;me.jakenations.Main&#39;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="n">repositories</span> <span class="o">{</span>
+    <span class="n">mavenCentral</span><span class="o">()</span>
+<span class="o">}</span>
+
+<span class="n">dependencies</span> <span class="o">{</span>
+    <span class="n">testCompile</span> <span class="nl">group:</span> <span class="s1">&#39;junit&#39;</span><span class="o">,</span> <span class="nl">name:</span> <span class="s1">&#39;junit&#39;</span><span class="o">,</span> <span class="nl">version:</span> <span class="s1">&#39;4.+&#39;</span>
+<span class="o">}</span>
+
+<span class="n">test</span> <span class="o">{</span>
+    <span class="n">systemProperties</span> <span class="s1">&#39;property&#39;</span><span class="o">:</span> <span class="s1">&#39;value&#39;</span>
+<span class="o">}</span>
+
+<span class="n">run</span><span class="o">{</span>
+    <span class="n">standardInput</span> <span class="o">=</span> <span class="n">System</span><span class="o">.</span><span class="na">in</span>
+<span class="o">}</span>
+
+<span class="n">group</span> <span class="o">=</span> <span class="s1">&#39;me.jakenations&#39;</span>
+<span class="n">version</span> <span class="o">=</span> <span class="s1">&#39;1.0&#39;</span>
+
+<span class="n">publishing</span> <span class="o">{</span>
+    <span class="n">publications</span> <span class="o">{</span>
+        <span class="n">mavenJava</span><span class="o">(</span><span class="n">MavenPublication</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">from</span> <span class="n">components</span><span class="o">.</span><span class="na">java</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="n">repositories</span> <span class="o">{</span>
+        <span class="n">maven</span> <span class="o">{</span>
+            <span class="n">url</span> <span class="s2">&quot;http://s3.amazonaws.com/tttrepository/repository&quot;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre></div>
+
+</div>
+
+<div class="related">
+  <h2>Related Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/2014/10/02/build-tools-and-repeatability/">
+            Build Tools
+            <small>02 Oct 2014</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2014/10/01/still-android/">
+            OO Android
+            <small>01 Oct 2014</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2014/09/26/how-to-make-the-android-emulator-faster/">
+            How To Make The Android Emulator Faster
+            <small>26 Sep 2014</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+    </div>
+
+  </body>
+</html>

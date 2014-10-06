@@ -83,8 +83,134 @@
   
   <div class="post">
     <h1 class="post-title">
-      <a href="/2014/09/26/how-to-make-android-emulator-faster/">
-        How To Make Android Emulator Faster
+      <a href="/2014/10/03/using-the-gradle-build-tool/">
+        Using the Gradle Build Tool
+      </a>
+    </h1>
+
+    <span class="post-date">03 Oct 2014</span>
+
+    <p>In my previous blog post, I discussed what an automated build tool is, and how using one in your project will benefit you and your team. Over the last few weeks, I have been working on 2 Java projects, a Tic Tac Toe Engine and an Android Tic Tac Toe that uses the engine as a dependency. Both of these projects use the Gradle build tool, and in this post I will show you how I set it up and what plugin does. </p>
+
+<p>Before I go into my personal Gradle setup, I will explain what Gradle is, and why I chose it over other build tools.  The description from the Gradle website says: </p>
+
+<blockquote>
+<p>Gradle combines the power and flexibility of Ant with the dependency management and conventions of Maven into a more effective way to build. Powered by a Groovy DSL and packed with innovation...</p>
+</blockquote>
+
+<p>If we remove the buzzwords and jargon, the description could be summed up as: Gradle is a flexible build tool that can script common build tasks, and it follows the maven repository convention. Instead of using XML, Gradle uses Groovy, a dynamically typed language on the JVM, to describe the build. This results in a build file that contains a lot less boilerplate XML, and can be parsed easier by human readers. </p>
+
+<p>There are a few reasons why I chose Gradle over Maven or Ant, but the greatest factor in me choosing to do so was the fact that it did not use XML in the build file. Compared to Ant or Maven, Gradle&#39;s build file is very clean and easy to read because of the fact that it does not have any XML tags cluttering the information. Here is my build file for my Java Tic Tac Toe project: </p>
+
+<div class="highlight"><pre><code class="language-groovy" data-lang="groovy"><span class="n">apply</span> <span class="nl">plugin:</span> <span class="s1">&#39;java&#39;</span>
+<span class="n">apply</span> <span class="nl">plugin:</span> <span class="s1">&#39;application&#39;</span>
+<span class="n">apply</span> <span class="nl">plugin:</span> <span class="s1">&#39;maven-publish&#39;</span>
+
+<span class="n">mainClassName</span> <span class="o">=</span> <span class="s1">&#39;me.jakenations.Main&#39;</span>
+
+<span class="n">sourceCompatibility</span> <span class="o">=</span> <span class="mf">1.6</span>
+<span class="n">targetCompatibility</span> <span class="o">=</span> <span class="mf">1.6</span>
+
+<span class="n">sourceSets</span> <span class="o">{</span>
+    <span class="n">main</span> <span class="o">{</span>
+        <span class="n">java</span><span class="o">{</span>
+            <span class="n">srcDir</span> <span class="s1">&#39;src/main/me/jakenations&#39;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="n">test</span> <span class="o">{</span>
+        <span class="n">java</span> <span class="o">{</span>
+            <span class="n">srcDir</span> <span class="s1">&#39;src/test/me/jakenations&#39;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="n">jar</span> <span class="o">{</span>
+    <span class="n">manifest</span> <span class="o">{</span>
+        <span class="n">attributes</span> <span class="s1">&#39;Main-Class&#39;</span><span class="o">:</span> <span class="s1">&#39;me.jakenations.Main&#39;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="n">repositories</span> <span class="o">{</span>
+    <span class="n">mavenCentral</span><span class="o">()</span>
+<span class="o">}</span>
+
+<span class="n">dependencies</span> <span class="o">{</span>
+    <span class="n">testCompile</span> <span class="nl">group:</span> <span class="s1">&#39;junit&#39;</span><span class="o">,</span> <span class="nl">name:</span> <span class="s1">&#39;junit&#39;</span><span class="o">,</span> <span class="nl">version:</span> <span class="s1">&#39;4.+&#39;</span>
+<span class="o">}</span>
+
+<span class="n">test</span> <span class="o">{</span>
+    <span class="n">systemProperties</span> <span class="s1">&#39;property&#39;</span><span class="o">:</span> <span class="s1">&#39;value&#39;</span>
+<span class="o">}</span>
+
+<span class="n">run</span><span class="o">{</span>
+    <span class="n">standardInput</span> <span class="o">=</span> <span class="n">System</span><span class="o">.</span><span class="na">in</span>
+<span class="o">}</span>
+
+<span class="n">group</span> <span class="o">=</span> <span class="s1">&#39;me.jakenations&#39;</span>
+<span class="n">version</span> <span class="o">=</span> <span class="s1">&#39;1.0&#39;</span>
+
+<span class="n">publishing</span> <span class="o">{</span>
+    <span class="n">publications</span> <span class="o">{</span>
+        <span class="n">mavenJava</span><span class="o">(</span><span class="n">MavenPublication</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">from</span> <span class="n">components</span><span class="o">.</span><span class="na">java</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="n">repositories</span> <span class="o">{</span>
+        <span class="n">maven</span> <span class="o">{</span>
+            <span class="n">url</span> <span class="s2">&quot;http://s3.amazonaws.com/tttrepository/repository&quot;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre></div>
+
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/2014/10/02/build-tools-and-repeatability/">
+        Build Tools
+      </a>
+    </h1>
+
+    <span class="post-date">02 Oct 2014</span>
+
+    <p>Over the last few weeks, I have been working exclusively with Java to build my Tic Tac Toe applications. Since Java is a compiled language, source code must be compiled before it can be run.  The compiler converts your human readable source code into computer readable byte code, and once your code is compiled, your code is now executable and can be run. This process has to be done each time the source code changes in order for the changes that were made to be available in the program. This process can be done manually by compiling and building a .jar file (Java Executable file) in your IDE, and then you can manually run the .jar file by running </p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">java -jar &lt;.jar file here&gt;</code></pre></div>
+    
+
+<p>This process works well when you have a small project that you are working on, but when you get to a larger project, there are a lot more things to do than just compiling and running.  This is where an automated build tool comes in very handy. An automated build tool is a program that automates the creation of executable software from source code, and many other tasks that are needed on larger projects. </p>
+
+<p>One of the things that an automated build tool will do for you is running all of your tests before it builds the program, and if one of the tests fails, it will interrupt the build and tell you that a test failed. This is very helpful because it will alert you that something isn&#39;t working, and it will prevent you from compiling and publishing broken code. </p>
+
+<p>Another thing that automated build tools will do for you is take care of installing and maintaining the dependencies of the project. This means that the build tool knows what external libraries the project relies, and makes sure that the correct versions are installed. Most build tools can be pointed to a remote repository where the external library is stored, and then download and cache the correct version in your project.  </p>
+
+<p>Along with getting the dependencies from remote repositories, most build tools will also be able to publish your program to a remote repository as well. While sounding very technical, a repository is a file structure that holds .jar files and artifacts that are needed to build the library. The way most repositories file structures are set up is: the organization, then the package name, and lastly the version. Using my Tic Tac Toe application as an example, the file structure of the remote repository looks like this <strong>me/jakenations/java-tic-tac-toe/1.0</strong> .  This is a common file structure that is used by build tools in order to maintain a convention between programmers, so that built tools can get any dependency that is needed from a repository. </p>
+
+<p>While build tools make programmers lives easier by taking care of these tasks automatically, they also help by making this process repeatable for anyone building the project. If configured correctly, everyone working on or with the project will have it build the same way without any extra effort. This is what I consider to be the most important aspect of the build tool because without this repeatability, programmers would be struggling to share projects with each other because the code will be different each time the code is built by someone else. </p>
+
+<p>In my next blog post, I will go more in depth about how I used Gradle to build my Tic Tac Toe projects, and how you can create your own repository on Amazon S3.</p>
+
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/2014/10/01/still-android/">
+        OO Android
+      </a>
+    </h1>
+
+    <span class="post-date">01 Oct 2014</span>
+
+    <p>This week I have completed my Tic Tac Toe Android app, and I am now working on refactoring and polishing it.  One of the major refactors that I completed was to remove the duplication of code that was shared between the activities of the same game type.</p>
+
+<p>In order to do this I had to create an abstract activity class that contained the shared behaviors between the activities that controlled games versus humans and games versus computers. While this seems like a straightforward refactor, there were some snags because of the way that the activity class works. Because each subclass of the activity class must call an onCreate method that calls its superclass when it is created, I had to come up with a way for the base class to call all the way up to the Activity class. I was able to do this by having the base class call its super class and the super class to call the activity class, and it was able to start the new activity while sharing the behavior between two different activities.</p>
+
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/2014/09/26/how-to-make-the-android-emulator-faster/">
+        How To Make The Android Emulator Faster
       </a>
     </h1>
 
@@ -98,8 +224,9 @@
 
 <p>The Android SDK now allows you to enable graphics acceleration. When enabled, this moves the graphics processing from inside the emulator to the dedicated graphics processing unit (GPU)  that is built into your computer. When enabled you should see a drastic improvement in the way the graphics load on the emulator.</p>
 
-<p>The only thing that you must do in order to implement the graphics acceleration on the Android Virtual Device (AVD) is to set GPU emulation to yes during the initial set up of the device. That&#39;s it. If you are using Android Studio as your IDE this is what the check box looks like:
-<img src="http://i58.tinypic.com/w2k9zb.png" alt="GPU acceleration"></p>
+<p>The only thing that you must do in order to implement the graphics acceleration on the Android Virtual Device (AVD) is to set GPU emulation to yes during the initial set up of the device. That&#39;s it. If you are using Android Studio as your IDE this is what the check box looks like:</p>
+
+<p><img src="http://i58.tinypic.com/w2k9zb.png" alt="GPU acceleration"></p>
 
 <p>After setting this option, and restarting the emulator you should notice a difference in the quality of the graphics rendered.</p>
 
@@ -119,8 +246,9 @@
 
 <p>Once you have installed the HAXM, you will need to download the x86 Emulator System Image. Since most android phones use an ARM processor, this allows you to run an emulator that matches your computers processor architecture instead of having to emulate an ARM core. You can download the system image <a href="https://software.intel.com/en-us/android/articles/android-44-kitkat-x86-emulator-system-image">here.</a></p>
 
-<p>After you have downloaded and installed the system image, go to the AVD manager where you enabled the GPU acceleration. In the drop down box called CPU/ABI, select the Intel Atom (x86) processor. 
-<img src="http://i62.tinypic.com/122i1cx.png" alt="Processor"></p>
+<p>After you have downloaded and installed the system image, go to the AVD manager where you enabled the GPU acceleration. In the drop down box called CPU/ABI, select the Intel Atom (x86) processor.</p>
+
+<p><img src="http://i62.tinypic.com/122i1cx.png" alt="Processor"></p>
 
 <h2>Boot It Up</h2>
 
@@ -142,115 +270,6 @@
 <p>Now that we got the bad parts out of the way, I can talk about what I have enjoyed so far and what I am looking forward to. I am glad that I took the time to figure out how gradle works because it has been an invaluable resource in building my original tic tac toe into a .jar file. Since android uses gradle as well, I was able to quickly set my original code as a dependency and was able to access all of the game methods from within my android app. Once I got it all wired up, I was able to play a simple game of tic tac toe on the VM. Now that I have my simple game working, I need to build it out to be as functional as my console based version. This means that I will need to add a replay function and the ability to run the game on a 4 x 4 board as well.</p>
 
 <p>This leads me to what I am looking forward to the most, using threads to move the game process to run in the background of the main UI thread. I have noticed that the Negamax algorithm runs much slower on the phone than on the computer, and if I did not move it to a background process for a 4 x 4 board, the algorithm will certainly crash the application. I have been doing a lot of reading about threading lately, and I am excited to get my first start on it. </p>
-
-  </div>
-  
-  <div class="post">
-    <h1 class="post-title">
-      <a href="/2014/09/22/optimizing/">
-        Optimizing
-      </a>
-    </h1>
-
-    <span class="post-date">22 Sep 2014</span>
-
-    <p>Over the weekend, I spent a fair amount of time researching how to make my Tic Tac Toe algorithm faster on a large board. While I expanded my knowledge on game tree searching algorithms, the actual process of implementing such a process into my algorithm was rather difficult. I spent a few hours this morning trying to implement a transposition table in my Tic Tac Toe algorithm to make it run at a more acceptable speed. A transposition table is a hash-map that stores board state as the key, and all other necessary data as the value. However when I tried to implement it into my algorithm, I was unable to find the proper place to set the key value, and because of this, it caused my algorithm to no longer work as intended. </p>
-
-<p>Transposition tables are normally used in chess algorithms where possible outcomes are orders and orders of magnitude higher than a four by four Tic Tac Toe board, so by using this approach I was essentially trying to kill a fly with a bazooka. While almost on the verge of giving up, I stumbled upon a small error in my alpha beta break. With just this fix, I made my algorithm run at the speeds at which I wanted. </p>
-
-<p>Even though my algorithm is fully backed by automated tests, the error was not able to be picked up by the test suite. This is because it was not a functionality breaking error, but instead, it just caused the alpha beta break not to be called as often as it should have been. The only way to tell if was working as intended was to play the game and see how fast it would run. Even with the error in the alpha beta break, the program ran faster than when it did not have it, so I assumed that everything was working as intended. </p>
-
-<p>In conclusion, check to make sure your code is working as you intended before you start bringing out the bazookas to &quot;fix&quot; it. </p>
-
-  </div>
-  
-  <div class="post">
-    <h1 class="post-title">
-      <a href="/2014/09/18/progress/">
-        Progress
-      </a>
-    </h1>
-
-    <span class="post-date">18 Sep 2014</span>
-
-    <p>Two weeks in, and I am loving every minute of my apprenticeship at 8th Light. This week I have extended my Tic Tac Toe game to be able to play on a 4x4 board, and have set it to allow any combination of human and computer players to play each other. While all of the new features are working, the computer player on the 4x4 is considerably slower than on a 3x3 board. The first few moves by the computer take upwards of 10 seconds, but as the board fills up its choices are near instantaneous. I have been researching a few options on how to speed up the computer player, and the options are: store boards and their values in a hash map, or to use a method called iterative deepening on the negamax tree search. Both options will need more research, but I am leaning towards using the hashing method. </p>
-
-<p>Along with the work  on Tic Tac Toe, I have started reading Clean Code by Bob Martin, and the book is helping me to become more aware of the SOLID principles. I look forward to getting a bunch of reading and research in this weekend on both topics, so I can have some more intellectual fuel for my next blog posts.</p>
-
-  </div>
-  
-  <div class="post">
-    <h1 class="post-title">
-      <a href="/2014/09/15/got-smells%3F/">
-        Got Smells?
-      </a>
-    </h1>
-
-    <span class="post-date">15 Sep 2014</span>
-
-    <p>Oh, What a glorious day! That program you have been working on for many days is finally done, and you are now ready to share it with the world. Well almost... While going over your code from the previous day&#39;s work, you have noticed that your code has started to develop a certain odor, also known as code smells. This odor should not actually smell (if it does, maybe you need a shower), but instead it is  some working code that could turn into a problem in the future. Take sushi for example, a bad piece of fish is still sushi, but it could lead to (intestinal) problems in the future. Just like bad fish, code smells are something that you want to actively remove from your codebase.</p>
-
-<p>Today during a code review with my mentor, we uncovered a odoriferous method within my Tic Tac Toe game loop.</p>
-
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="k">while</span> <span class="o">(!</span><span class="n">rules</span><span class="o">.</span><span class="na">gameOver</span><span class="o">(</span><span class="n">board</span><span class="o">)){</span>
-      <span class="k">if</span> <span class="o">(</span><span class="n">currentPlayer</span> <span class="k">instanceof</span> <span class="n">HumanPlayer</span><span class="o">){</span>
-            <span class="n">currentPlayer</span><span class="o">.</span><span class="na">selectMove</span><span class="o">();</span>
-      <span class="o">}</span> <span class="k">else</span> <span class="nf">if</span><span class="o">(</span><span class="n">currentPlayer</span> <span class="k">instanceof</span> <span class="n">ComputerPlayer</span><span class="o">)</span> <span class="o">{</span>
-             <span class="n">console</span><span class="o">.</span><span class="na">computerMove</span><span class="o">();</span>
-             <span class="n">currentPlayer</span><span class="o">.</span><span class="na">makeMove</span><span class="o">(</span><span class="n">currentPlayer</span><span class="o">.</span><span class="na">unbeatableComputer</span><span class="o">());</span>
-      <span class="o">}</span>
-      <span class="n">console</span><span class="o">.</span><span class="na">printBoard</span><span class="o">();</span>
-      <span class="n">switchPlayers</span><span class="o">();</span>
-<span class="o">}</span></code></pre></div>
-
-<p>The purpose of the above code is to determine whether the current player is a human or computer, and then call their class-specific method to make a move. While the code works, what would happen if the requirements changed, and now an animal player must be added to the game as well? If I were to keep the same code structure it would look something like this :</p>
-
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="k">while</span> <span class="o">(!</span><span class="n">rules</span><span class="o">.</span><span class="na">gameOver</span><span class="o">(</span><span class="n">board</span><span class="o">)){</span>
-       <span class="k">if</span> <span class="o">(</span><span class="n">currentPlayer</span> <span class="k">instanceof</span> <span class="n">HumanPlayer</span><span class="o">){</span>
-            <span class="n">currentPlayer</span><span class="o">.</span><span class="na">selectMove</span><span class="o">();</span>
-       <span class="o">}</span> <span class="k">else</span> <span class="nf">if</span><span class="o">(</span><span class="n">currentPlayer</span> <span class="k">instanceof</span> <span class="n">ComputerPlayer</span><span class="o">)</span> <span class="o">{</span>
-             <span class="n">console</span><span class="o">.</span><span class="na">computerMove</span><span class="o">();</span>
-             <span class="n">currentPlayer</span><span class="o">.</span><span class="na">makeMove</span><span class="o">(</span><span class="n">currentPlayer</span><span class="o">.</span><span class="na">unbeatableComputer</span><span class="o">());</span>
-       <span class="o">}</span> <span class="k">else</span> <span class="nf">if</span> <span class="o">(</span><span class="n">currentPlayer</span> <span class="n">instanceOf</span> <span class="n">AnimalPlayer</span><span class="o">)</span> <span class="o">{</span>
-             <span class="n">currentPlayer</span><span class="o">.</span><span class="na">animalMove</span><span class="o">();</span>
-        <span class="o">}</span>
-       <span class="n">console</span><span class="o">.</span><span class="na">printBoard</span><span class="o">();</span>
-       <span class="n">switchPlayers</span><span class="o">();</span>
-<span class="o">}</span></code></pre></div>
-
-<p>The only way to get this program to continue functioning in its current state is to add another statement to the conditional. This is not a sustainable fix to the problem because if another type of player is added to the game, the pattern of adding statements to the conditional will continue, and this method will begin to bloat in size. This is not good, and something has to be done to prevent the coming bloat.</p>
-
-<p>In his book <em>Refactoring</em>, Martin Fowler describes this code smell as such: &quot;You have a conditional that chooses different behavior depending on the type of an object.&quot; This statement accurately describes the situation the code is in because the conditional selects the appropriate makeMove() method for each type of object. Luckily, this is a book about refactoring, and Martin gives a solution to refactor the problem code: &quot;Move each leg of the conditional to an overriding method in a subclass. Make the original method abstract.&quot; While his solution makes sense, it uses a bit of jargon, so let’s break it down into steps.</p>
-
-<p>The first step in the refactoring process is to change each leg of the conditional into a method that shares the same name but does something different. This is called an overriding method because it will override an inherited method with the method you specified in the subclass. After making this change the code will look something like this:</p>
-
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="k">while</span> <span class="o">(!</span><span class="n">rules</span><span class="o">.</span><span class="na">gameOver</span><span class="o">(</span><span class="n">board</span><span class="o">)){</span>
-       <span class="k">if</span> <span class="o">(</span><span class="n">currentPlayer</span> <span class="k">instanceof</span> <span class="n">HumanPlayer</span><span class="o">){</span>
-             <span class="n">currentPlayer</span><span class="o">.</span><span class="na">selectMove</span><span class="o">();</span>
-       <span class="o">}</span> <span class="k">else</span> <span class="nf">if</span><span class="o">(</span><span class="n">currentPlayer</span> <span class="k">instanceof</span> <span class="n">ComputerPlayer</span><span class="o">)</span> <span class="o">{</span>
-           <span class="n">currentPlayer</span><span class="o">.</span><span class="na">selectMove</span><span class="o">();</span>
-       <span class="o">}</span> <span class="k">else</span> <span class="nf">if</span> <span class="o">(</span><span class="n">currentPlayer</span> <span class="n">instanceOf</span> <span class="n">AnimalPlayer</span><span class="o">)</span> <span class="o">{</span>
-                        <span class="n">currentPlayer</span><span class="o">.</span><span class="na">selectMove</span><span class="o">();</span>
-            <span class="o">}</span>
-       <span class="n">console</span><span class="o">.</span><span class="na">printBoard</span><span class="o">();</span>
-       <span class="n">switchPlayers</span><span class="o">();</span>
-<span class="o">}</span></code></pre></div>
-
-<p>Completing the first step has cleaned up each leg of the conditional, but the method still requires the conditional statement in order to run. In order to remove the conditional statement from the code entirely, the second step, making the original method abstract, must be completed. To clarify what this means, let’s take a look at a model of the current class structure:</p>
-
-<p><img src="http://i57.tinypic.com/2h31r80.png" alt="UML"></p>
-
-<p>Currently each player object has its own separate method selectMove(), but since each is a subclass of Player, we can set selectMove() as an abstract method in the player class. Doing so will allow us to remove the conditional from the method, and call selectMove() on any player object. This will allow us to access the intended behavior from each object without the need for a long and complicated conditional statement. Here are the results from the refactor:</p>
-
-<p><img src="http://i58.tinypic.com/14slgt1.png" alt="UML2"></p>
-
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="k">while</span> <span class="o">(!</span><span class="n">rules</span><span class="o">.</span><span class="na">gameOver</span><span class="o">(</span><span class="n">board</span><span class="o">)){</span>
-      <span class="n">currentPlayer</span><span class="o">.</span><span class="na">selectMove</span><span class="o">();</span>
-      <span class="n">console</span><span class="o">.</span><span class="na">printBoard</span><span class="o">();</span>
-      <span class="n">switchPlayers</span><span class="o">();</span>
-<span class="o">}</span></code></pre></div>
-
-<p>Look at that! After making the changes to the player objects, there is no longer a need for the bloated conditional statement, and the method no longer needs to know the specific type of object it is currently dealing with. This is made possible by the object-oriented principle of polymorphism. Polymorphism comes from the Greek words many and forms, and that is exactly how the player class now acts: it has many forms. Because they all share the same superclass, the player objects are now hidden from the rest of the program, but they still produce the same behaviors. Removing smells such as this will make your program much more extensible as requirements change over time.</p>
 
   </div>
   

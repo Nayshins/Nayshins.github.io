@@ -83,6 +83,115 @@
   
   <div class="post">
     <h1 class="post-title">
+      <a href="/2014/09/22/optimizing/">
+        Optimizing
+      </a>
+    </h1>
+
+    <span class="post-date">22 Sep 2014</span>
+
+    <p>Over the weekend, I spent a fair amount of time researching how to make my Tic Tac Toe algorithm faster on a large board. While I expanded my knowledge on game tree searching algorithms, the actual process of implementing such a process into my algorithm was rather difficult. I spent a few hours this morning trying to implement a transposition table in my Tic Tac Toe algorithm to make it run at a more acceptable speed. A transposition table is a hash-map that stores board state as the key, and all other necessary data as the value. However when I tried to implement it into my algorithm, I was unable to find the proper place to set the key value, and because of this, it caused my algorithm to no longer work as intended. </p>
+
+<p>Transposition tables are normally used in chess algorithms where possible outcomes are orders and orders of magnitude higher than a four by four Tic Tac Toe board, so by using this approach I was essentially trying to kill a fly with a bazooka. While almost on the verge of giving up, I stumbled upon a small error in my alpha beta break. With just this fix, I made my algorithm run at the speeds at which I wanted. </p>
+
+<p>Even though my algorithm is fully backed by automated tests, the error was not able to be picked up by the test suite. This is because it was not a functionality breaking error, but instead, it just caused the alpha beta break not to be called as often as it should have been. The only way to tell if was working as intended was to play the game and see how fast it would run. Even with the error in the alpha beta break, the program ran faster than when it did not have it, so I assumed that everything was working as intended. </p>
+
+<p>In conclusion, check to make sure your code is working as you intended before you start bringing out the bazookas to &quot;fix&quot; it. </p>
+
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/2014/09/18/progress/">
+        Progress
+      </a>
+    </h1>
+
+    <span class="post-date">18 Sep 2014</span>
+
+    <p>Two weeks in, and I am loving every minute of my apprenticeship at 8th Light. This week I have extended my Tic Tac Toe game to be able to play on a 4x4 board, and have set it to allow any combination of human and computer players to play each other. While all of the new features are working, the computer player on the 4x4 is considerably slower than on a 3x3 board. The first few moves by the computer take upwards of 10 seconds, but as the board fills up its choices are near instantaneous. I have been researching a few options on how to speed up the computer player, and the options are: store boards and their values in a hash map, or to use a method called iterative deepening on the negamax tree search. Both options will need more research, but I am leaning towards using the hashing method. </p>
+
+<p>Along with the work  on Tic Tac Toe, I have started reading Clean Code by Bob Martin, and the book is helping me to become more aware of the SOLID principles. I look forward to getting a bunch of reading and research in this weekend on both topics, so I can have some more intellectual fuel for my next blog posts.</p>
+
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/2014/09/15/got-smells%3F/">
+        Got Smells?
+      </a>
+    </h1>
+
+    <span class="post-date">15 Sep 2014</span>
+
+    <p>Oh, What a glorious day! That program you have been working on for many days is finally done, and you are now ready to share it with the world. Well almost... While going over your code from the previous day&#39;s work, you have noticed that your code has started to develop a certain odor, also known as code smells. This odor should not actually smell (if it does, maybe you need a shower), but instead it is  some working code that could turn into a problem in the future. Take sushi for example, a bad piece of fish is still sushi, but it could lead to (intestinal) problems in the future. Just like bad fish, code smells are something that you want to actively remove from your codebase.</p>
+
+<p>Today during a code review with my mentor, we uncovered a odoriferous method within my Tic Tac Toe game loop.</p>
+
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="k">while</span> <span class="o">(!</span><span class="n">rules</span><span class="o">.</span><span class="na">gameOver</span><span class="o">(</span><span class="n">board</span><span class="o">)){</span>
+      <span class="k">if</span> <span class="o">(</span><span class="n">currentPlayer</span> <span class="k">instanceof</span> <span class="n">HumanPlayer</span><span class="o">){</span>
+            <span class="n">currentPlayer</span><span class="o">.</span><span class="na">selectMove</span><span class="o">();</span>
+      <span class="o">}</span> <span class="k">else</span> <span class="nf">if</span><span class="o">(</span><span class="n">currentPlayer</span> <span class="k">instanceof</span> <span class="n">ComputerPlayer</span><span class="o">)</span> <span class="o">{</span>
+             <span class="n">console</span><span class="o">.</span><span class="na">computerMove</span><span class="o">();</span>
+             <span class="n">currentPlayer</span><span class="o">.</span><span class="na">makeMove</span><span class="o">(</span><span class="n">currentPlayer</span><span class="o">.</span><span class="na">unbeatableComputer</span><span class="o">());</span>
+      <span class="o">}</span>
+      <span class="n">console</span><span class="o">.</span><span class="na">printBoard</span><span class="o">();</span>
+      <span class="n">switchPlayers</span><span class="o">();</span>
+<span class="o">}</span></code></pre></div>
+
+<p>The purpose of the above code is to determine whether the current player is a human or computer, and then call their class-specific method to make a move. While the code works, what would happen if the requirements changed, and now an animal player must be added to the game as well? If I were to keep the same code structure it would look something like this :</p>
+
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="k">while</span> <span class="o">(!</span><span class="n">rules</span><span class="o">.</span><span class="na">gameOver</span><span class="o">(</span><span class="n">board</span><span class="o">)){</span>
+       <span class="k">if</span> <span class="o">(</span><span class="n">currentPlayer</span> <span class="k">instanceof</span> <span class="n">HumanPlayer</span><span class="o">){</span>
+            <span class="n">currentPlayer</span><span class="o">.</span><span class="na">selectMove</span><span class="o">();</span>
+       <span class="o">}</span> <span class="k">else</span> <span class="nf">if</span><span class="o">(</span><span class="n">currentPlayer</span> <span class="k">instanceof</span> <span class="n">ComputerPlayer</span><span class="o">)</span> <span class="o">{</span>
+             <span class="n">console</span><span class="o">.</span><span class="na">computerMove</span><span class="o">();</span>
+             <span class="n">currentPlayer</span><span class="o">.</span><span class="na">makeMove</span><span class="o">(</span><span class="n">currentPlayer</span><span class="o">.</span><span class="na">unbeatableComputer</span><span class="o">());</span>
+       <span class="o">}</span> <span class="k">else</span> <span class="nf">if</span> <span class="o">(</span><span class="n">currentPlayer</span> <span class="n">instanceOf</span> <span class="n">AnimalPlayer</span><span class="o">)</span> <span class="o">{</span>
+             <span class="n">currentPlayer</span><span class="o">.</span><span class="na">animalMove</span><span class="o">();</span>
+        <span class="o">}</span>
+       <span class="n">console</span><span class="o">.</span><span class="na">printBoard</span><span class="o">();</span>
+       <span class="n">switchPlayers</span><span class="o">();</span>
+<span class="o">}</span></code></pre></div>
+
+<p>The only way to get this program to continue functioning in its current state is to add another statement to the conditional. This is not a sustainable fix to the problem because if another type of player is added to the game, the pattern of adding statements to the conditional will continue, and this method will begin to bloat in size. This is not good, and something has to be done to prevent the coming bloat.</p>
+
+<p>In his book <em>Refactoring</em>, Martin Fowler describes this code smell as such: &quot;You have a conditional that chooses different behavior depending on the type of an object.&quot; This statement accurately describes the situation the code is in because the conditional selects the appropriate makeMove() method for each type of object. Luckily, this is a book about refactoring, and Martin gives a solution to refactor the problem code: &quot;Move each leg of the conditional to an overriding method in a subclass. Make the original method abstract.&quot; While his solution makes sense, it uses a bit of jargon, so let’s break it down into steps.</p>
+
+<p>The first step in the refactoring process is to change each leg of the conditional into a method that shares the same name but does something different. This is called an overriding method because it will override an inherited method with the method you specified in the subclass. After making this change the code will look something like this:</p>
+
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="k">while</span> <span class="o">(!</span><span class="n">rules</span><span class="o">.</span><span class="na">gameOver</span><span class="o">(</span><span class="n">board</span><span class="o">)){</span>
+       <span class="k">if</span> <span class="o">(</span><span class="n">currentPlayer</span> <span class="k">instanceof</span> <span class="n">HumanPlayer</span><span class="o">){</span>
+             <span class="n">currentPlayer</span><span class="o">.</span><span class="na">selectMove</span><span class="o">();</span>
+       <span class="o">}</span> <span class="k">else</span> <span class="nf">if</span><span class="o">(</span><span class="n">currentPlayer</span> <span class="k">instanceof</span> <span class="n">ComputerPlayer</span><span class="o">)</span> <span class="o">{</span>
+           <span class="n">currentPlayer</span><span class="o">.</span><span class="na">selectMove</span><span class="o">();</span>
+       <span class="o">}</span> <span class="k">else</span> <span class="nf">if</span> <span class="o">(</span><span class="n">currentPlayer</span> <span class="n">instanceOf</span> <span class="n">AnimalPlayer</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="n">currentPlayer</span><span class="o">.</span><span class="na">selectMove</span><span class="o">();</span>
+            <span class="o">}</span>
+       <span class="n">console</span><span class="o">.</span><span class="na">printBoard</span><span class="o">();</span>
+       <span class="n">switchPlayers</span><span class="o">();</span>
+<span class="o">}</span></code></pre></div>
+
+<p>Completing the first step has cleaned up each leg of the conditional, but the method still requires the conditional statement in order to run. In order to remove the conditional statement from the code entirely, the second step, making the original method abstract, must be completed. To clarify what this means, let’s take a look at a model of the current class structure:</p>
+
+<p><img src="http://i57.tinypic.com/2h31r80.png" alt="UML"></p>
+
+<p>Currently each player object has its own separate method selectMove(), but since each is a subclass of Player, we can set selectMove() as an abstract method in the player class. Doing so will allow us to remove the conditional from the method, and call selectMove() on any player object. This will allow us to access the intended behavior from each object without the need for a long and complicated conditional statement. Here are the results from the refactor:</p>
+
+<p><img src="http://i58.tinypic.com/14slgt1.png" alt="UML2"></p>
+
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="k">while</span> <span class="o">(!</span><span class="n">rules</span><span class="o">.</span><span class="na">gameOver</span><span class="o">(</span><span class="n">board</span><span class="o">)){</span>
+      <span class="n">currentPlayer</span><span class="o">.</span><span class="na">selectMove</span><span class="o">();</span>
+      <span class="n">console</span><span class="o">.</span><span class="na">printBoard</span><span class="o">();</span>
+      <span class="n">switchPlayers</span><span class="o">();</span>
+<span class="o">}</span></code></pre></div>
+
+<p>Look at that! After making the changes to the player objects, there is no longer a need for the bloated conditional statement, and the method no longer needs to know the specific type of object it is currently dealing with. This is made possible by the object-oriented principle of polymorphism. Polymorphism comes from the Greek words many and forms, and that is exactly how the player class now acts: it has many forms. Because they all share the same superclass, the player objects are now hidden from the rest of the program, but they still produce the same behaviors. Removing smells such as this will make your program much more extensible as requirements change over time.</p>
+
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
       <a href="/2014/09/11/day-three-and-mocking/">
         Day Three And Mocking
       </a>
