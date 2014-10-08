@@ -1,0 +1,13 @@
+---
+layout: post
+title: Clean Coder Takeaways
+---
+
+While a large part of my apprenticeship at 8th light is to become a better programmer, another part of it is to learn how to become a software professional. To most people, those two things may sound the same, but in realty they are not. Being an excellent programmer does not automatically make you a software professional, but as I can see it, striving to be a professional will help to make me a better programmer.  I am currently reading *The Clean Coder* by Bob Martin(Uncle Bob) which is a book dedicated to laying a foundation to becoming a software professional.
+
+
+
+
+Overall I have been enjoying this book, and I have torn through most of it within a day. The largest takeaway that I have gained from it so far is the idea of not compromising the quality of the software in order to finish it quickly. There are many reasons why this is a poor practice, but there are just as many mental traps where you can convince yourself otherwise. A story from the book that represents this idea is the republished blog post  [*Is Good Code Impossible*  by John Blanco](http://raptureinvenice.com/is-good-code-impossible/). The blog post is about how John accepts a project with an impossible timeline, and the actions he takes in order to meet this deadline. He starts off by describing how the company executives described the app as throwaway code and how "simple" the app is. John ignores clear red flags from the executives, and makes himself believe that the features the customer wants to add will be indeed "simple." Making a long story into one sentence, it turned out that the app became anything but simple, and he had to throw away the idea of writing good code in order to finish it. Bob describes this act as being unprofessional because he sacrificed the quality of his work in order to meet a deadline, but in John's mind he was being a hero for sacrificing so much in order to ship code by this impossible deadline. I agree with Bob's view on this outcome because as a professional you strive to always write the best possible code. While many people see this act as time consuming, it is always going to be more beneficial to the customer and to yourself. 
+
+When you write high quality code, you know that what you can be proud of what you created, and you prevent yourself from creating problems for yourself in the future due to lack in discipline. This is just one of the many ways you can carry yourself as a professional, and one I mean to stick to throughout my career. 
