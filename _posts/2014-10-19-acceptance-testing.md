@@ -1,0 +1,7 @@
+---
+layout: post
+title: Acceptance Testing
+---
+Over the past week I have been familiarizing myself with Clojure with the purpose of building a functioning http server that passes the cob spec acceptance tests. The porpoise of acceptance tests are to determine of the requirements of the program are met, and the software can be accepted by the end user. While most developers write unit tests to test their code, acceptance tests are done without having knowledge of the actual codebase. This is called Black-Box testing because the testing framework examines the functionality of the software by sending an input and checking the output without knowledge of what is going on in the program. 
+
+Because developers of the software under test have intimate knowledge of what they are testing, unit tests are not a good representation of how the software is intended to be used on a macro scale, but are instead used to make sure that each part of the program is working as expected. The main job of acceptance testing is to test the high level functioning of the program in a way that the end user will use the program. Once the program passes the acceptance tests, the program is not considered “done” but accepted as satisfying the end users criteria. As an aspiring software craftsman, this has been an important lessons on the porpoise of these two different but necessary methods for testing software. 
