@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Saturation to Illumination: The Stages of Creative Thought
+title: Stages of Creative Thought
 ---
 
 Until I found myself unhappy in my first job, I had never believed that I was a creative person. In a job that did not have any outlet for creativity, I began to search for alternatives, and luckily for me, I found computer programming.
