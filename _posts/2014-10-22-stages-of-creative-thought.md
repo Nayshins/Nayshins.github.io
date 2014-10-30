@@ -38,4 +38,4 @@ Lastly, we have the verification step, and this is when you act on the ideas tha
 
 ### Takeaway
 
-Realizing that difficult problems take time to solve and learning more about the steps involved in making creative decisions, has given me a deeper insight into my creative process. I now have a toolset to recognize what stage of thought my brain is in, and how to effectively coax solutions from the apparent chaos of creative thought.
+The realization that difficult problems take time to solve and with greater knowledge of the steps involved in making creative decisions, I now have a deeper insight into my creative process. I have added a new toolset to recognize what stage of thought my brain is in, and now know how to effectively coax solutions from the apparent chaos of creative thought.
