@@ -34,7 +34,7 @@ class Car
 		puts "Driving a car"
 	end	
 end
-{% endhightlight ruby %}
+{% endhighlight ruby %}
 This example is breaking the dependency  because the Driver class is creating a new instance of a car each time a driver is created. While at first it makes sense to create a car when a driver is initialized because a driver always needs a car to drive, what happens if the driver becomes a truck driver? How would the driver be able to drive a truck if it always initializes a car when created. This is when the DIP is helpful because you pass the needed dependency into the class instead of creating it on initialization. 
 
 Here is the code refactored to use the DIP:
