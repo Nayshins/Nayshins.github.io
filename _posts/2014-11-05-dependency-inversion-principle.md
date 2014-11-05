@@ -61,7 +61,7 @@ class Truck
 		puts "I'm driving a truck"
 	end
 end
-{% endhightlight %}
+{% endhighlight %}
 
 Since the driver class no longer initializes a car when created, any vehicle that has a drive method can be passed into the class and can be driven by the driver.
 
