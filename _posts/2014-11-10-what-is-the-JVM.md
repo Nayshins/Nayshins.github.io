@@ -25,7 +25,7 @@ Once the program has been compiled into .class files, you are now able to run yo
 
 An interpreter works by reading, interpreting and executing bytecode instructions one by one. This process is very quick at reading single instructions, but it is slow at executing the interpreted result. This makes the interpreter useful for executing single instructions that are not used as much in the program.
 
-The second part of the execution engine is the Just-In-Time Compiler. The JIT works by compiling code into the native execution language at runtime. Natively compiled code works much faster than interpreting the code, but it takes more time for the compiler to compile the code at the start. For this reason, only code that gets executed many times will be compiled by the JIT compiler, and code that is used less will be run by the interpreter. 
+The second part of the execution engine is the Just-In-Time Compiler. The JIT works by compiling code into the native execution language at runtime. Natively compiled code works much faster than interpreting the code, but it takes more time for the compiler to compile the code at the start. For this reason, only code that gets executed many times will be compiled by the JIT compiler, and code that is used less, will be run by the interpreter. 
 
 ## Conclusion
 
