@@ -1,0 +1,10 @@
+---
+title: hard problems
+layout: post
+---
+
+This week I have been working on refactoring my http server to be more extensible. The first iteration of my server worked, but it would have only worked well as a static file server. Since the http standard isn't just about serving static files, I had to make some major changes in the architecture of my server in order to make it more extensible. One of the resources that my mentor pointed me to was the Clojure http middleware called Ring. Ring is not an http server, but instead it is what is known as a http middleware. Its job is not to handle the socket connections or reading in the http request and writing out the response, but instead its job is to convert the http request into a program readable format, pass the request to a handler, and then take the response back to the server to be sent out. 
+
+My goal for the next iteration of my http server is to create a layer of functionality that works like ring on top of my server layer. This will allow me to create handlers that can run anything from a web app to a static file server with my server layer just focusing on inputs and outputs. While the idea sounds easy enough when I write it in a blog, the idea has been giving me some trouble implementing because it requires functions that call functions from a list, and visualizing this sort of program is very difficult. I am making some good progress, but I am still a good distance from implementing this on my own. One of the resources I have been using to help me ideate this change is reading the ring source files on Github. The changes I am making to my server will not be as robust as what ring currently is, but seeing how the Ring creators handled certain issues has given me some inspiration on how to move forward. 
+
+I am very excited for this change to be completed because it is not a simple fix, and the challenges I face in implementing this, will force me into learning even more about Clojure than ever before.
