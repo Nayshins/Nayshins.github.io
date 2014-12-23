@@ -10,7 +10,6 @@ user_input = params[:input]
 
 secret_data = SecretData.where("client_email = #{user_input}")
 
-# If a malicious user were to input this '); DELETE FROM SecretData" into the query, all of the data in the table would be deleted
 {% endhighlight %}
 
 The malicious SQL works by first ending the programs existing SQL query, and then insert its own SQL statement that deletes all the data from the table. While this is an incredibly simple attack, there is an equally simple way to protect your program from such attacks, and in rails this can be done by parameterizing your query. An example of a parameterized query is:
